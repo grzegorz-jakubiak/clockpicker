@@ -117,48 +117,48 @@
 		this.spanMinutes = popover.find('.clockpicker-span-minutes');
 		this.spanAmPm = popover.find('.clockpicker-span-am-pm');
 		this.amOrPm = "PM";
-		
+
 		// Setup for for 12 hour clock if option is selected
 		if (options.twelvehour) {
-			
+
 			var  amPmButtonsTemplate = ['<div class="clockpicker-am-pm-block">',
 				'<button type="button" class="btn btn-sm btn-default clockpicker-button clockpicker-am-button">',
 				'AM</button>',
 				'<button type="button" class="btn btn-sm btn-default clockpicker-button clockpicker-pm-button">',
 				'PM</button>',
 				'</div>'].join('');
-			
+
 			var amPmButtons = $(amPmButtonsTemplate);
 			//amPmButtons.appendTo(plate);
-			
+
 			////Not working b/c they are not shown when this runs
 			//$('clockpicker-am-button')
 			//    .on("click", function() {
 			//        self.amOrPm = "AM";
 			//        $('.clockpicker-span-am-pm').empty().append('AM');
 			//    });
-			//    
+			//
 			//$('clockpicker-pm-button')
 			//    .on("click", function() {
 			//         self.amOrPm = "PM";
 			//        $('.clockpicker-span-am-pm').empty().append('PM');
 			//    });
-	
+
 			$('<button type="button" class="btn btn-sm btn-default clockpicker-button am-button">' + "AM" + '</button>')
 				.on("click", function() {
 					self.amOrPm = "AM";
 					$('.clockpicker-span-am-pm').empty().append('AM');
 				}).appendTo(this.amPmBlock);
-				
-				
+
+
 			$('<button type="button" class="btn btn-sm btn-default clockpicker-button pm-button">' + "PM" + '</button>')
 				.on("click", function() {
 					self.amOrPm = 'PM';
 					$('.clockpicker-span-am-pm').empty().append('PM');
 				}).appendTo(this.amPmBlock);
-				
+
 		}
-		
+
 		if (! options.autoclose) {
 			// If autoclose is not setted, append a button
 			$('<button type="button" class="btn btn-sm btn-default btn-block clockpicker-button">' + options.donetext + '</button>')
@@ -576,7 +576,7 @@
 			inner = isHours && z < (outerRadius + innerRadius) / 2,
 			radius = inner ? innerRadius : outerRadius,
 			value;
-			
+
 			if (options.twelvehour) {
 				radius = outerRadius;
 			}
@@ -621,7 +621,7 @@
 				}
 			}
 		}
-		
+
 		// Once hours or minutes changed, vibrate the device
 		if (this[this.currentView] !== value) {
 			if (vibrate && this.options.vibrate) {
@@ -679,7 +679,7 @@
 		if  (this.options.twelvehour) {
 			value = value + this.amOrPm;
 		}
-		
+
 		this.input.prop('value', value);
 		if (value !== last) {
 			this.input.triggerHandler('change');
@@ -694,6 +694,19 @@
 
 		raiseCallback(this.options.afterDone);
 	};
+
+	ClockPicker.prototype.getTime = function() {
+		var hours = this.hours;
+		if (this.options.twelvehour && hours < 12 && this.amOrPm === 'PM') {
+			hours += 12;
+		}
+
+		var time = new Date();
+		time.setHours(hours);
+		time.setMinutes(this.minutes);
+
+		return time;
+	}
 
 	// Remove clockpicker from input
 	ClockPicker.prototype.remove = function() {
@@ -712,18 +725,31 @@
 	// Extends $.fn.clockpicker
 	$.fn.clockpicker = function(option){
 		var args = Array.prototype.slice.call(arguments, 1);
-		return this.each(function(){
+
+		function handleClockPickerRequest() {
 			var $this = $(this),
 				data = $this.data('clockpicker');
 			if (! data) {
 				var options = $.extend({}, ClockPicker.DEFAULTS, $this.data(), typeof option == 'object' && option);
 				$this.data('clockpicker', new ClockPicker($this, options));
 			} else {
-				// Manual operatsions. show, hide, remove, e.g.
+				// Manual operations. show, hide, remove, getTime, e.g.
 				if (typeof data[option] === 'function') {
-					data[option].apply(data, args);
+					return data[option].apply(data, args);
 				}
 			}
-		});
+		}
+
+		// If we explicitly do a call on a single element then we can return the value (if needed)
+		// This allows us, for example, to return the value of getTime
+		if (this.length == 1) {
+			var returnValue = handleClockPickerRequest.apply(this[0]);
+
+			// If we do not have any return value then return the object itself so you can chain
+			return returnValue !== undefined ? returnValue : this;
+		}
+
+		// If we do have a list then we do not care about return values
+		return this.each(handleClockPickerRequest);
 	};
 }());
