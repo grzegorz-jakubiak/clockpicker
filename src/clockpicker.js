@@ -441,7 +441,7 @@
 		// Initialize
 		if (! this.isAppended) {
 			// Append popover to body
-			$body = $(document.body).append(this.popover);
+			$body = $('#app .task-component .input-with-icon').append(this.popover);
 
 			// Reset position when resize
 			$win.on('resize.clockpicker' + this.id, function(){
