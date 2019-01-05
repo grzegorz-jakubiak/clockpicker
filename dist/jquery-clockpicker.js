@@ -67,7 +67,6 @@
 	// Popover template
 	var tpl = [
 		'<div class="popover clockpicker-popover">',
-			'<div class="arrow"></div>',
 			'<div class="popover-title">',
 				'<span class="clockpicker-span-hours text-primary"></span>',
 				' : ',
@@ -390,7 +389,7 @@
 			styles = {},
 			self = this;
 
-		popover.show();
+		popover.css('visibility', 'visible');
 
 		// Place the popover
 		switch (placement) {
@@ -505,7 +504,7 @@
 		$doc.off('click.clockpicker.' + this.id + ' focusin.clockpicker.' + this.id);
 		$doc.off('keyup.clockpicker.' + this.id);
 
-		this.popover.hide();
+		this.popover.css('visibility', 'hidden');
 
 		raiseCallback(this.options.afterHide);
 	};
@@ -714,7 +713,7 @@
 		this.input.off('focus.clockpicker click.clockpicker');
 		this.addon.off('click.clockpicker');
 		if (this.isShown) {
-			this.hide();
+			this.css('visibility', 'hidden');
 		}
 		if (this.isAppended) {
 			$win.off('resize.clockpicker' + this.id);
