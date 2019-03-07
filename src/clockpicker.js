@@ -474,23 +474,6 @@
 
 		this.isShown = true;
 
-		// Hide when clicking or tabbing on any element except the clock, input and addon
-		// $doc.on('click.clockpicker.' + this.id + ' focusin.clockpicker.' + this.id, function(e){
-		// 	var target = $(e.target);
-		// 	if (target.closest(self.popover).length === 0 &&
-		// 			target.closest(self.addon).length === 0 &&
-		// 			target.closest(self.input).length === 0) {
-		// 		self.hide();
-		// 	}
-		// });
-
-		// // Hide when ESC is pressed
-		// $doc.on('keyup.clockpicker.' + this.id, function(e){
-		// 	if (e.keyCode === 27) {
-		// 		self.hide();
-		// 	}
-		// });
-
 		raiseCallback(this.options.afterShow);
 	};
 
