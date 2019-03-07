@@ -650,7 +650,7 @@
   // Hours and minutes are selected
   ClockPicker.prototype.done = function () {
     raiseCallback(this.options.beforeDone)
-    this.hide()
+    // this.hide()
     var last = this.input.prop('value'),
       value = leadingZero(this.hours) + ':' + leadingZero(this.minutes)
     if (this.options.twelvehour) {
