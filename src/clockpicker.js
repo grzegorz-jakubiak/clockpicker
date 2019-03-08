@@ -295,7 +295,7 @@
             self.minutesView.addClass('clockpicker-dial-out')
             setTimeout(function () {
               self.done()
-            }, duration / 2)
+            }, duration)
           }
         }
         plate.prepend(canvas)
