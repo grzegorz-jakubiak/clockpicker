@@ -114,7 +114,7 @@
     this.spanHours = popover.find('.clockpicker-span-hours')
     this.spanMinutes = popover.find('.clockpicker-span-minutes')
     this.spanAmPm = popover.find('.clockpicker-span-am-pm')
-    this.amOrPm = 'PM'
+    this.amOrPm = 'AM'
 
     // Setup for for 12 hour clock if option is selected
     if (options.twelvehour) {
@@ -653,9 +653,6 @@
     this.toggleView('hours')
     var last = this.input.prop('value'),
       value = leadingZero(this.hours) + ':' + leadingZero(this.minutes)
-    if (this.options.twelvehour) {
-      value = value + this.amOrPm
-    }
 
     this.input.prop('value', value)
     if (value !== last) {
